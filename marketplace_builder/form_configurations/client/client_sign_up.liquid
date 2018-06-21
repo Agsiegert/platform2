@@ -1,0 +1,34 @@
+---
+name: client_sign_up
+resource: User
+return_to: '/sign-in'
+configuration:
+  email:
+  password:
+  first_name:
+    validation:
+      presence: true
+  profiles:
+    client:
+      enabled:
+        property_options:
+          default: true
+          readonly: true
+      validation:
+        presence: true
+    validation:
+      presence: true
+---
+{% form %}
+  {% input first_name %}
+  {% input email %}
+  {% input password, as: password %}
+
+  {% fields_for profiles %}
+    {% fields_for client, form: profiles %}
+      {% input enabled, as: hidden, form: client %}
+    {% endfields_for %}
+  {% endfields_for %}
+
+  {% submit Create %}
+{% endform %}

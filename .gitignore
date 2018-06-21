@@ -1,0 +1,7 @@
+
+build
+build.zip
+marketplace_builder/assets
+node_modules
+tmp
+.env

@@ -1,0 +1,44 @@
+---
+name: developer_sign_up
+resource: User
+return_to: '/sign-in'
+configuration:
+  email:
+  password:
+  first_name:
+    validation:
+      presence: true
+  mobile_number:
+    validation:
+      presence: true
+  profiles:
+    developer:
+      enabled:
+        property_options:
+          default: true
+          readonly: true
+      validation:
+        presence: true
+    validation:
+      presence: true
+email_notifications:
+  - welcome_user
+sms_notifications:
+  - welcome_user
+api_call_notifications:
+  - ping_example_com_on_user_sign_up
+---
+{% form %}
+  {% input first_name %}
+  {% input email %}
+  {% input password, as: password %}
+  {% input mobile_number, placeholder: 'Please include country code' %}
+
+  {% fields_for profiles %}
+    {% fields_for developer, form: profiles %}
+      {% input enabled, as: hidden, form: developer %}
+    {% endfields_for %}
+  {% endfields_for %}
+
+  {% submit Create %}
+{% endform %}
