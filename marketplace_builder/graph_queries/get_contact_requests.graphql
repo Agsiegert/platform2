@@ -1,0 +1,9 @@
+query get_contact_requests {
+  customizations(name: "contact_request") {
+    results {
+      name: property(name: "name")
+      email: property(name: "email")
+      description: property(name: "description")
+    }
+  }
+}

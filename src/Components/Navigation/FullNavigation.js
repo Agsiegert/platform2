@@ -53,6 +53,18 @@ class FullNavigation extends React.Component {
               toggleExpanded={ this.toggleExpanded }
             />
             <Logo scrolled={ scrolled } navigationStyle={ navigationStyle } />
+            <a href="/sign-in">
+              Sign In
+            </a>
+              |
+            <a href="/sign-up">
+               Sign Up
+            </a>
+               |
+            <a href="/projects">
+               Projects
+            </a>
+
             <SearchIcon toggleSearch={ toggleSearch } />
           </div>
 

@@ -1,0 +1,18 @@
+---
+name: contact_form
+resource: Customization
+resource_owner: anyone
+redirect_to: /contacts
+configuration:
+  properties:
+    name:
+      validation:
+        presence: true
+    email:
+      validation:
+        presence: true
+        email: true
+    description:
+      validation:
+        presence: true
+---

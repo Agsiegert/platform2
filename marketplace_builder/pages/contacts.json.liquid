@@ -1,0 +1,7 @@
+---
+slug: contacts
+layout_name: ''
+---
+{%- query_graph 'get_contact_requests', result_name: 'g' -%}
+
+{{ g | json }}

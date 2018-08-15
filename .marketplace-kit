@@ -1,1 +1,7 @@
-{"staging":{"url":"https://scrivito-commerce.staging-california.near-me.com/","token":"NDc3MDR8MTU5MjY5Njc1Ng==--a203fe1880ce9facd4257aa279585f21bf5fd34e","email":"antony.siegert@infopark.de"}}
+{
+  "staging": {
+    "url": "https://scrivito-commerce.staging-california.near-me.com/",
+    "token": "3f588c7cd5ca86582866f64a9c761ce960b31009",
+    "email": "antony.siegert@infopark.de"
+  }
+}

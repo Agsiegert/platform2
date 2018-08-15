@@ -1,6 +1,10 @@
 import * as React from 'react';
 import * as Scrivito from 'scrivito';
+import ProjectsComponent from '../../Components/PlatformOSProjects';
 
 Scrivito.provideComponent('Homepage', ({ page }) =>
-  <Scrivito.ContentTag tag="div" content={ page } attribute="body" />
+  <div>
+    <Scrivito.ContentTag tag="div" content={ page } attribute="body" />
+    <ProjectsComponent />
+  </div>  
 );

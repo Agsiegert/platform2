@@ -1,116 +1,151 @@
 import * as React from 'react';
 import * as Scrivito from 'scrivito';
-import './contactForm.html';
-/* This html file is needed for Netlify form handling. Updates to inputs in this file should also be
-added to contactForm.html as well. See the following link for details:
-https://www.netlify.com/blog/2017/07/20/how-to-integrate-netlifys-form-handling-in-a-react-app/
-*/
 
-Scrivito.provideComponent('ContactFormWidget', ({ widget }) => {
-  const classNames = ['row'];
+class ContactFormWidget extends React.Component {
+  constructor(props) {
+    super(props);
 
-  if (widget.get('backgroundColor') === 'transparent') {
-    classNames.push('card-white-transparent');
-  } else {
-    classNames.push('floating-label', 'card-theme', 'card', 'card-padding');
+    this.state = {
+      name: '',
+      email: '',
+      description: '',
+      sent: false,
+      error: false
+    };
+    this.onInputChange = this.onInputChange.bind(this);
+    this.onFormSubmit = this.onFormSubmit.bind(this);
   }
 
-  return (
-    <div className={ classNames.join(' ') }>
-      <form className="row" method="post">
-        <input
-          type="hidden"
-          name="form-name"
-          value="contact"
-        />
-        <div className="d-none">
-          <label>Don’t fill this out: <input name="bot-field" /></label>
+  onFormSubmit(e) {
+    e.preventDefault();
+    const name = this.state.name;
+    const email = this.state.email;
+    const description = this.state.description;
+    const gatewayUrl =
+      'https://scrivito-commerce.staging-california.near-me.com/api/customizations.json';
+
+    fetch(gatewayUrl, {
+      method: 'POST',
+      headers: {
+        Authorization: 'Token token=0c35128df5eb2fe099607727f2807346',
+        Accept: 'application/vnd.nearme.v4+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        form_configuration_name: 'contact_form',
+        parent_resource_id: 'contact_request',
+        customization: {
+          properties_attributes: {
+            name,
+            email,
+            description
+          }
+        }
+      })
+    }).then(
+      () => {
+        this.setState({ sent: true });
+      },
+      () => {
+        this.setState({ error: true });
+      }
+    );
+  }
+
+  onInputChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
+  render() {
+    const widget = this.props.widget;
+    const confirmationText =
+      (widget.get('confirmationText') ||
+      'Thank you for your message') +
+      `, ${this.state.name}!`;
+    if (this.state.sent) {
+      return (
+        <div className="alert alertsuccess">
+          <strong>{ confirmationText }</strong>
         </div>
-        <div className="col-sm-6">
-          <div className="form-group">
-            <label htmlFor="contactName">Your name</label>
-            <input
-              className="form-control form-control-lg"
-              id="contactName"
-              name="contactName"
-              placeholder="Name"
-              type="text"
-              required
-            />
-          </div>
-        </div>
-        <div className="col-sm-6">
-          <div className="form-group">
-            <label htmlFor="contactFamilyName">Family name</label>
-            <input
-              className="form-control form-control-lg"
-              id="contactFamilyName"
-              name="contactFamilyName"
-              placeholder="Family name"
-              type="text"
-              required
-            />
-          </div>
-        </div>
-        <div className="col-sm-6">
-          <div className="form-group">
-            <label htmlFor="contactEmail">Email address</label>
-            <input
-              className="form-control form-control-lg"
-              id="contactEmail"
-              name="contactEmail"
-              placeholder="Email"
-              type="email"
-              required
-            />
-          </div>
-        </div>
-        <div className="col-sm-6">
-          <div className="form-group">
-            <label htmlFor="contactCompany">Company (optional)</label>
-            <input
-              className="form-control form-control-lg"
-              id="contactCompany"
-              name="contactCompany"
-              placeholder="Company"
-              type="text"
-            />
-          </div>
-        </div>
-        <div className="col-sm-12">
-          <div className="form-group">
-            <label htmlFor="contactMessage">Message</label>
-            <textarea
-              className="form-control form-control-lg"
-              rows="3"
-              id="contactMessage"
-              name="contactMessage"
-              placeholder="Your Message..."
-              required
-            />
-          </div>
-          {
-            widget.get('agreementText') && <div className="form-group form-check">
+      );
+    }
+    const classNames = ['row'];
+
+    if (widget.get('backgroundColor') === 'transparent') {
+      classNames.push('card-white-transparent');
+    } else {
+      classNames.push('floating-label', 'card-theme', 'card', 'card-padding');
+    }
+    
+    return (
+       <div className={ classNames.join(' ') }>
+        <h3>Contact us</h3>
+        <form className="row" onSubmit={this.onFormSubmit}>
+          <div className="col-sm-6">
+            <div className="form-group">
+              <label>Name:</label>
               <input
-                className="form-check-input"
-                id="agreementTextCheck"
-                type="checkbox"
-                name="contactAgreement"
-                value={ widget.get('agreementText') }
+                onChange={this.onInputChange}
+                type="text"
+                name="name"
+                placeholder="Name"
+                className="form-control form-control-lg"
                 required
               />
-              <label className="form-check-label" htmlFor="agreementTextCheck">
-                { widget.get('agreementText') }
-              </label>
             </div>
-          }
-          <button
-            className="btn btn-primary btn-block"
-            type="submit">
-            { widget.get('buttonText') || 'send message' }
-          </button>
-        </div>
-      </form>
-    </div>
-  );
-});
+          </div>
+          <div className="col-sm-6">
+            <div className="form-group">
+              <label>Email:</label>
+              <input
+                onChange={this.onInputChange}
+                type="email"
+                name="email"
+                placeholder="Email"
+                className="form-control form-control-lg"
+                required
+              />
+            </div>
+          </div>
+          <div className="col-sm-12">
+            <div className="form-group">
+              <label>Description:</label>
+              <textarea
+                onChange={this.onInputChange}
+                name="description"
+                placeholder="Your Message..."
+                className="form-control form-control-lg"
+                required
+              />
+            </div>
+            {
+              widget.get('agreementText') && <div className="form-group form-check">
+                <input
+                  className="form-check-input"
+                  id="agreementTextCheck"
+                  type="checkbox"
+                  name="contactAgreement"
+                  value={ widget.get('agreementText') }
+                  required
+                />
+                <label className="form-check-label" htmlFor="agreementTextCheck">
+                  { widget.get('agreementText') }
+                </label>
+              </div>
+            }
+            { this.state.error &&
+              <p>An error occurred. Please try again.</p>
+            }
+            <button
+              className="btn btn-primary btn-block"
+              type="submit">
+              { widget.get('buttonText') || 'send message' }
+            </button>
+          </div>
+        </form>
+      </div>
+    );
+  }
+}
+
+Scrivito.provideComponent('ContactFormWidget', ContactFormWidget);

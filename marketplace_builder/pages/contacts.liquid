@@ -1,0 +1,12 @@
+---
+slug: contacts
+layout_name: platform
+---
+
+{%- query_graph 'get_contact_requests', result_name: 'g' -%}
+
+<ul>
+  {% for user in g.customizations.results %}
+    <li>{{ user.name }},  {{ user.email }},  {{ user.description }}</li>
+  {% endfor %}
+</ul>
